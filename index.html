@@ -7,6 +7,15 @@
 	<script src="js/app.js"></script>
 </head>
 <body ng-app="app">
-	{{ 16/2 }} 
+	<div ng-controller="MainController">
+		
+		{{message}} <br>
+		Name: {{oreoruhi.name}} <br>
+		Description: {{oreoruhi.bio}} <br>
+		<img ng-src="{{oreoruhi.avatar_url}}" alt="{{oreoruhi.name}}">
+
+
+
+	</div>
 </body>
 </html>

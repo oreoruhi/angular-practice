@@ -23,22 +23,50 @@ var app = angular.module('app', []);
 // console.log(truthpolice);
 
 
-app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
+app.controller('MainController', ['$scope', '$http', 'MainService', function ($scope, $http, MainService) {
 	
-	$scope.message = "SexyDJ is false";
+	function init(){
+		searchfunction();		
+	}	
 
-	var DJ = {
-		firstname: "Denniel Joshu",
-		lastname: "Diaz",
-		desc: "Sexy"
+	function searchfunction(){
+		$scope.searchuser = function(username){
+			MainService.SampleGet(username)
+			.then(function(response){
+				$scope.error = null;
+			 	$scope.oreoruhi = response.data;
+			 	console.log(response);
+
+			 	MainService.SampleRepeat(username)
+			 	.then(function(reporesponse){
+			 		$scope.repo = reporesponse.data;
+			 		$scope.repoorder = "+name";
+			 		console.log(reporesponse);
+			 	}, function(none){
+			 		console.log(none);
+			 	});
+
+			 }, function(error){
+			 	$scope.error = "User not found.";
+			 	console.log(error);
+			 });
+		}
 	}
 
-	$scope.DJ = DJ;
+	init();
 
-	$http.get("https://api.github.com/users/oreoruhi")
-		 .then(function(response){
-		 	$scope.oreoruhi = response.data;
-		 	console.log(response);
-		 });
+}]);
+
+app.service('MainService', ['$http', function ($http) {
+	
+	var mainservice = this;
+
+	mainservice.SampleGet = function(username){
+		return $http.get("https://api.github.com/users/" + username);
+	}
+
+	mainservice.SampleRepeat = function(username){
+		return $http.get("https://api.github.com/users/" + username + "/repos");
+	}
 
 }]);
